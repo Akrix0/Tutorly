@@ -5,6 +5,11 @@ from core.models import BaseModel
 from core import exceptions
 from accounts.models import Account, TutorSubject
 
+class PaymentStatus(models.TextChoices):
+        PENDING = "pending", "Pending payment"
+        CONFIRMED = "confirmed", "Confirmed"
+        COMPLETED = "completed", "Completed"
+        CANCELLED = "cancelled", "Cancelled"
 
 class Lesson(BaseModel):
     tutor = models.ForeignKey(Account, on_delete=models.PROTECT , related_name="tutor_lessons")
@@ -13,9 +18,8 @@ class Lesson(BaseModel):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    lesson_link = models.URLField(
-        blank=True
-    )
+    lesson_link = models.URLField(blank=True)
+    status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
 
     def __str__(self):
         return f"{self.subject} with {self.tutor.username} for {self.student.username} on {self.date}"
