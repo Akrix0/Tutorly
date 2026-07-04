@@ -1,17 +1,16 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from core.models import BaseModel
 from core import exceptions
+from core.models import BaseModel
 from accounts.models import Account, TutorSubject
 
-class PaymentStatus(models.TextChoices):
-        PENDING = "pending", "Pending payment"
+class Lesson(BaseModel):
+    class LessonStatus(models.TextChoices):
+        PENDING = "pending", "Pending"
         CONFIRMED = "confirmed", "Confirmed"
         COMPLETED = "completed", "Completed"
         CANCELLED = "cancelled", "Cancelled"
-
-class Lesson(BaseModel):
     tutor = models.ForeignKey(Account, on_delete=models.PROTECT , related_name="tutor_lessons")
     student = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="student_lessons")
     subject = models.ForeignKey(TutorSubject, on_delete=models.CASCADE, related_name="subject_lessons")
@@ -19,7 +18,7 @@ class Lesson(BaseModel):
     start_time = models.TimeField()
     end_time = models.TimeField()
     lesson_link = models.URLField(blank=True)
-    status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
+    status = models.CharField(max_length=20, choices=LessonStatus.choices, default=LessonStatus.PENDING)
 
     def __str__(self):
         return f"{self.subject} with {self.tutor.username} for {self.student.username} on {self.date}"

@@ -6,7 +6,7 @@ from autoslug import AutoSlugField
 from django_countries.fields import CountryField
 
 from core import exceptions
-from core.models import BaseModel
+from core.models import BaseModel, Currency
 from core.utils import custom_slugify
 
 class Account(AbstractUser, BaseModel):
@@ -72,7 +72,6 @@ class TutorCard(BaseModel):
         Account,
         on_delete=models.CASCADE,
         related_name="tutor_card",
-        editable=False,
     )
 
     birth_date = models.DateField()
@@ -134,6 +133,11 @@ class TutorSubject(BaseModel):
         validators=[
             MinValueValidator(1)
         ]
+    )
+    currency = models.CharField(
+        max_length=3,
+        choices=Currency.choices,
+        default=Currency.USD
     )
 
     def __str__(self):

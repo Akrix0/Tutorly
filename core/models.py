@@ -6,3 +6,10 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+class Currency(models.TextChoices):
+    USD = "USD", "US Dollar"
+    EUR = "EUR", "Euro"
+    GBP = "GBP", "British Pound"
+    JPY = "JPY", "Japanese Yen"
+    HRN = "HRN", "Ukrainian Hryvnia"
