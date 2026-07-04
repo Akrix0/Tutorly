@@ -1,11 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 
 from autoslug import AutoSlugField
 from django_countries.fields import CountryField
 
+from core import exceptions
 from core.models import BaseModel
 from core.utils import custom_slugify
 
@@ -83,9 +83,7 @@ class TutorCard(BaseModel):
         super().clean()
 
         if self.account.role != Account.UserRole.TUTOR:
-            raise ValidationError({
-                "account": "Selected account must have the Tutor role."
-            })
+            raise exceptions.TutorRoleError()
         
     def __str__(self):
         return f"TutorCard for {self.account.username} ({self.country.name})"
@@ -118,9 +116,7 @@ class Availability(BaseModel):
         super().clean()
 
         if self.start_time >= self.end_time:
-            raise ValidationError({
-                "end_time": "End time must be later than start time."
-            })
+            raise exceptions.InvalidTimeRangeError()
         
     def __str__(self):
         return f"{self.get_weekday_display()} {self.start_time} - {self.end_time} for {self.tutor.account.username}"

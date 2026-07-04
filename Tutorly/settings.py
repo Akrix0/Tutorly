@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "autoslug",
     "django_countries",
     'accounts',
+    'lessons',
 ]
 
 MIDDLEWARE = [
