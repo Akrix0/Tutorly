@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "autoslug",
     "django_countries",
-    'accounts',
+    'accounts.apps.AccountsConfig',
     'lessons',
-    'payments',
+    'payments.apps.PaymentsConfig',
+    'reviews',
 ]
 
 MIDDLEWARE = [

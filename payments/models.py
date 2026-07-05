@@ -53,3 +53,7 @@ class Payment(BaseModel):
             f"{self.lesson.tutor} "
             f"({self.amount} {self.currency})"
         )
+
+    class Meta:
+        verbose_name="Payment"
+        verbose_name_plural="Payments"

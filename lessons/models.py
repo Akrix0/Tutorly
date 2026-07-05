@@ -36,9 +36,7 @@ class Lesson(BaseModel):
             raise exceptions.InvalidTimeRangeError()
         
         if self.subject.tutor.account != self.tutor:
-            raise ValidationError({
-                "subject": "The selected subject does not belong to this tutor."
-            })
+            raise exceptions.NotTutorSubjectError()
         
     class Meta:
         ordering = [

@@ -13,11 +13,13 @@ class LessonAdmin(admin.ModelAdmin):
         "tutor",
         "student",
         "subject",
+        "status",
     )
 
     list_filter = (
         "date",
         "subject__subject",
+        "status",
     )
 
     search_fields = (
@@ -73,6 +75,7 @@ class LessonAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "lesson_link",
+                    "status",
                 )
             },
         ),
