@@ -36,3 +36,10 @@ class NoCompletedLessonError(ValidationError):
         super().__init__({
             "lesson": "Student has no completed lessons with this tutor."
         })
+
+class PasswordsNotMatchError(ValidationError):
+    """Raised when password and confirm password doesn't match."""
+    def __init__(self):
+        super().__init__({
+            "password": "Password and confirm password doesn't match."
+        })

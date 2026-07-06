@@ -18,7 +18,6 @@ def get_total_price(price, start_time, end_time):
         raise InvalidTimeRangeError()
     return round(price * duration, 2)
 
-
 def find_average(*args):
     values = [v for v in args if v is not None]
     if not values:

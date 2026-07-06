@@ -16,7 +16,7 @@ class Account(AbstractUser, BaseModel):
         ADMIN = "admin", "Admin"
     
     username = models.CharField(max_length=128, unique=True)
-    slug = AutoSlugField(populate_from="username", slugify=custom_slugify, unique=True)
+    slug = AutoSlugField(populate_from="username", slugify=custom_slugify, unique=True, editable=False)
     role = models.CharField(max_length=16, choices=UserRole.choices, default = UserRole.STUDENT)
     bio = models.TextField(blank=True)
     avatar = models.ImageField(

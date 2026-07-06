@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block content %}
+
+<h1>Register</h1>
+
+<form id="register-form">
+    <div>
+        <label for="username">Username</label><br>
+        <input
+            type="text"
+            id="username"
+            name="username"
+            required
+            maxlength="128"
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="email">Email</label><br>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            required
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="password">Password</label><br>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            required
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="password2">Confirm password</label><br>
+        <input
+            type="password"
+            id="password2"
+            name="password2"
+            required
+        >
+    </div>
+
+    <br>
+
+    <button type="submit" id="register-btn">
+        Register
+    </button>
+</form>
+
+<div id="errors"></div>
+
+{% load static %}
+<script src="{% static 'js/accounts/auth.js' %}"></script>
+
+{% endblock content %}
