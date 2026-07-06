@@ -2,6 +2,7 @@ from django.utils.text import slugify
 
 from datetime import datetime
 from decimal import Decimal
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .exceptions import InvalidTimeRangeError
 
@@ -23,3 +24,11 @@ def find_average(*args):
     if not values:
         return None
     return round(sum(values) / len(values), 2)
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }

@@ -38,5 +38,5 @@ class UserLogoutSerializer(serializers.Serializer):
             token = RefreshToken(attrs["refresh"])
             attrs["token"] = token
         except TokenError:
-            raise serializers.ValidationError("Invalid refresh token.")
+            raise exceptions.InvalidRefreshTokenError()
         return attrs

@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from rest_framework_simplejwt.tokens import TokenError
 
 class TutorRoleError(ValidationError):
     """Raised when the selected account is not a tutor."""
@@ -42,4 +43,11 @@ class PasswordsNotMatchError(ValidationError):
     def __init__(self):
         super().__init__({
             "password": "Password and confirm password doesn't match."
+        })
+
+class InvalidRefreshTokenError(TokenError):
+    """Raised when invalid refresh token is given."""
+    def __init__(self):
+        super().__init__({
+            "token": "Invalid refresh token."
         })

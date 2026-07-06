@@ -1,17 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 <div class="container">
-    <a class="navbar-brand" href="/"><i class="bi bi-book"></i> Your Website</a>
+    <a class="navbar-brand" href="/"><i class="bi bi-book"></i> Tutorly</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
         <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
         </li>
         </ul>
         <ul class="navbar-nav">
@@ -26,16 +20,16 @@
                 <hr class="dropdown-divider" />
                 </li>
                 <li>
-                <a class="dropdown-item" href="#">Logout</a>
+                <a class="dropdown-item" href="{% url "accounts:logout" %}">Logout</a>
                 </li>
             </ul>
             </li>
         {% else %}
             <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
+            <a class="nav-link" href="{% url "accounts:login" %}">Login</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#">Sign Up</a>
+            <a class="nav-link" href="{% url "accounts:register" %}">Register</a>
             </li>
         {% endif %}
         </ul>
