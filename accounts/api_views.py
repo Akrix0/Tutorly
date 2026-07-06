@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
@@ -26,6 +26,7 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         user = authenticate(request=request, **serializer.validated_data)
         if user:
+            login(request, user)
             token = get_tokens_for_user(user)
             return Response(token, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid username or password."}, status=status.HTTP_401_UNAUTHORIZED)
@@ -35,6 +36,7 @@ class LogoutView(APIView):
     def post(self, request):
         serializer = serializers.UserLogoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        logout(request)
         token = serializer.validated_data["token"]
         token.blacklist()
         return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)

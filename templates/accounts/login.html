@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+
+<h1>Login</h1>
+
+<form id="login-form">
+    <div>
+        <label for="username">Username</label><br>
+        <input
+            type="text"
+            id="username"
+            name="username"
+            required
+            maxlength="128"
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="password">Password</label><br>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            required
+        >
+    </div>
+
+    <br>
+
+    <button type="submit" id="login-btn">
+        Login
+    </button>
+</form>
+
+<div id="errors"></div>
+
+{% load static %}
+<script src="{% static 'js/accounts/auth.js' %}"></script>
+
+{% endblock content %}
