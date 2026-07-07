@@ -3,7 +3,8 @@ from django.core.exceptions import ValidationError
 
 from core import exceptions
 from core.models import BaseModel
-from accounts.models import Account, TutorSubject
+from accounts.models import Account
+from profiles.models import TutorSubject
 
 class Lesson(BaseModel):
     class LessonStatus(models.TextChoices):

@@ -6,7 +6,7 @@ from .models import Subject
 
 @receiver(post_migrate)
 def create_subjects(sender, **kwargs):
-    if sender.name != "accounts":
+    if sender.name != "profiles":
         return
 
     for value, _ in Subject.SubjectNames.choices:
