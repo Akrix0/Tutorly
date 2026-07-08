@@ -8,14 +8,12 @@ class TutorRoleError(ValidationError):
             "tutor": "Selected account must have Tutor role."
         })
 
-
 class StudentRoleError(ValidationError):
     """Raised when the selected account is not a student."""
     def __init__(self):
         super().__init__({
             "student": "Selected account must have Student role."
         })
-
 
 class InvalidTimeRangeError(ValidationError):
     """Raised when the end time is earlier than the start time."""
@@ -24,11 +22,51 @@ class InvalidTimeRangeError(ValidationError):
             "end_time": "End time must be later than start time."
         })
 
+class TimeIntervalsOverlapError(ValidationError):
+    """Raised when two time intervals overlap."""
+    def __init__(self):
+        super().__init__({
+            "start_time": "Time intervals overlap."
+        })
+
+class TooYoungError(ValidationError):
+    """Raised when tutor is 14 years old or younger."""
+    def __init__(self):
+        super().__init__({
+            "birth_date": "You are too young to be a tutor."
+        })
+
+class InvalidDataError(ValidationError):
+    """Raised when provided data is invalid."""
+    def __init__(self, data=None):
+        if data:
+            super().__init__({
+                data: f"Invalid {data} provided."
+            })
+        else:
+            super().__init__({
+                "data": "Invalid data provided."
+            })
+
+class DuplicateSubjectsError(ValidationError):
+    """Raised when same two subjects were provided."""
+    def __init__(self):
+        super().__init__({
+            "subject": "Two same subjects were provided."
+        })
+
 class NotTutorSubjectError(ValidationError):
-    """Raised when choosen subject does not belong to choosen tutor"""
+    """Raised when selected subject does not belong to selected tutor."""
     def __init__(self):
         super().__init__({
                 "subject": "The selected subject does not belong to this tutor."
+        })
+
+class TutorSubjectExistsError(ValidationError):
+    """Raised when selected subject already exists for this tutor."""
+    def __init__(self):
+        super().__init__({
+                "subject": "The selected subject already exists for this tutor."
         })
 
 class NoCompletedLessonError(ValidationError):
@@ -38,7 +76,7 @@ class NoCompletedLessonError(ValidationError):
             "lesson": "Student has no completed lessons with this tutor."
         })
 
-class PasswordsNotMatchError(ValidationError):
+class PasswordMismatchError(ValidationError):
     """Raised when password and confirm password doesn't match."""
     def __init__(self):
         super().__init__({
@@ -46,7 +84,7 @@ class PasswordsNotMatchError(ValidationError):
         })
 
 class InvalidRefreshTokenError(TokenError):
-    """Raised when invalid refresh token is given."""
+    """Raised when invalid refresh token is provided."""
     def __init__(self):
         super().__init__({
             "token": "Invalid refresh token."

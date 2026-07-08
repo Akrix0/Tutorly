@@ -5,6 +5,10 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     class Meta:
         abstract = True
 
@@ -13,7 +17,7 @@ class Currency(models.TextChoices):
     EUR = "EUR", "Euro"
     GBP = "GBP", "British Pound"
     JPY = "JPY", "Japanese Yen"
-    HRN = "HRN", "Ukrainian Hryvnia"
+    UAH = "UAH", "Ukrainian Hryvnia"
 
 class RatingField(models.DecimalField):
     def __init__(self, *args, **kwargs):

@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db import transaction
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
@@ -18,9 +19,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise exceptions.PasswordsNotMatchError()
+            raise exceptions.PasswordMismatchError()
         return attrs
-        
+
+    @transaction.atomic
     def create(self, validated_data):
         validated_data.pop('password2')
         return User.objects.create_user(**validated_data)

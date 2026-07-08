@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator
 from django_countries.fields import CountryField
 
 from accounts.models import Account
-from core import exceptions
+from core import exceptions, utils
 from core.models import BaseModel, Currency
 
 class TutorCard(BaseModel):
@@ -18,12 +18,22 @@ class TutorCard(BaseModel):
     experience_years = models.PositiveSmallIntegerField()
     country = CountryField()
 
+    @property
+    def age(self):
+        return utils.get_age(self.birth_date)
+
     def clean(self):
         super().clean()
 
         if self.account.role != Account.UserRole.TUTOR:
             raise exceptions.TutorRoleError()
         
+        if self.experience_years >= self.age - 12:
+            raise exceptions.InvalidDataError("experience_years")
+        
+        if utils.get_age(self.age) <= 14:
+            raise exceptions.TooYoungError()
+
     def __str__(self):
         return f"TutorCard for {self.account.username} ({self.country.name})"
 
@@ -75,7 +85,7 @@ class Availability(BaseModel):
         FRIDAY = 5, "Friday"
         SATURDAY = 6, "Saturday"
         SUNDAY = 7, "Sunday"
-    tutor = models.ForeignKey(
+    tutor_card = models.ForeignKey(
         TutorCard,
         on_delete=models.CASCADE,
         related_name="availability",
@@ -91,16 +101,16 @@ class Availability(BaseModel):
 
         if self.start_time >= self.end_time:
             raise exceptions.InvalidTimeRangeError()
-        
+
     def __str__(self):
-        return f"{self.get_weekday_display()} {self.start_time} - {self.end_time} for {self.tutor.account.username}"
+        return f"{self.get_weekday_display()} {self.start_time} - {self.end_time} for {self.tutor_card.account.username}"
 
     class Meta:
         verbose_name = "Availability"
         verbose_name_plural = "Availabilities"
 
 class TutorSubject(BaseModel):
-    tutor = models.ForeignKey(TutorCard, on_delete=models.CASCADE, related_name="subjects")
+    tutor_card = models.ForeignKey(TutorCard, on_delete=models.CASCADE, related_name="subjects")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="tutor_subjects")
     price_per_hour = models.DecimalField(
         max_digits=10,
@@ -116,11 +126,12 @@ class TutorSubject(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.subject.get_name_display()} for {self.tutor.account.username} at ${self.price_per_hour}/hour"
+        return f"{self.subject.get_name_display()} for {self.tutor_card.account.username} at ${self.price_per_hour}/hour"
+    
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["tutor", "subject"],
+                fields=["tutor_card", "subject"],
                 name="unique_tutor_subject",
             )
         ]
