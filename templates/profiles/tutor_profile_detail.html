@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Tutor Profile
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/profiles/styles.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+<h1>Tutor Profile</h1>
+
+<div id="tutor-profile" data-profile-pk="{{ profile_pk }}">
+
+    <section>
+        <h2>Tutor Information</h2>
+
+        <p>
+            <strong>Birth date:</strong>
+            <span id="birth-date"></span>
+        </p>
+
+        <p>
+            <strong>Experience:</strong>
+            <span id="experience-years"></span> years
+        </p>
+
+        <p>
+            <strong>Country:</strong>
+            <span id="country"></span>
+        </p>
+    </section>
+
+    <section>
+        <h2>Subjects</h2>
+
+        <div id="subjects-container">
+            <!-- JavaScript will insert subjects here -->
+        </div>
+    </section>
+
+    <section>
+        <h2>Availability</h2>
+
+        <div id="availabilities-container">
+            <!-- JavaScript will insert availabilities here -->
+        </div>
+    </section>
+
+</div>
+
+<template id="subject-template">
+    <div class="subject-item">
+        <p><strong>Subject:</strong> <span class="subject"></span></p>
+        <p><strong>Price / hour:</strong> <span class="price-per-hour"></span></p>
+        <p><strong>Currency:</strong> <span class="currency"></span></p>
+    </div>
+</template>
+
+<template id="availability-template">
+    <div class="availability-item">
+        <p><strong>Weekday:</strong> <span class="weekday"></span></p>
+        <p><strong>Start:</strong> <span class="start-time"></span></p>
+        <p><strong>End:</strong> <span class="end-time"></span></p>
+    </div>
+</template>
+
+<div id="errors d-none"></div>
+
+<script type="module" src="{% static 'js/profiles/tutor_profile_detail.js' %}"></script>
+
+{% endblock %}

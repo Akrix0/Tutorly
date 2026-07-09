@@ -8,13 +8,21 @@ from core import exceptions, utils
 class TutorSubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = TutorSubject
-        fields = ["subject", "price_per_hour", "currency"]
+        fields = [
+            "subject", 
+            "price_per_hour", 
+            "currency"
+            ]
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Availability
-        fields = ["weekday", "start_time", "end_time"]
+        fields = [
+            "weekday", 
+            "start_time", 
+            "end_time"
+            ]
 
 class TutorProfileCreateSerializer(serializers.ModelSerializer):
     subjects = TutorSubjectSerializer(many=True)
@@ -22,7 +30,13 @@ class TutorProfileCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TutorCard
-        fields = ["birth_date", "experience_years", "country", "subjects", "availabilities"]
+        fields = [
+            "birth_date", 
+            "experience_years", 
+            "country", 
+            "subjects", 
+            "availabilities"
+            ]
 
     def validate(self, attrs):
         age = utils.get_age(attrs["birth_date"])
@@ -65,3 +79,49 @@ class TutorProfileCreateSerializer(serializers.ModelSerializer):
         for availability in availabilities:
             Availability.objects.create(tutor_card=tutor_card, **availability)
         return tutor_card
+
+class TutorSubjectReadSerializer(serializers.ModelSerializer):
+    subject = serializers.SerializerMethodField("get_subject")
+    currency = serializers.CharField(source="get_currency_display")
+    
+    class Meta:
+        model = TutorSubject
+        fields = [
+            "id",
+            "subject",
+            "price_per_hour",
+            "currency",
+        ]
+
+    def get_subject(self, obj):
+        return obj.subject.get_name_display()
+
+
+class AvailabilityReadSerializer(serializers.ModelSerializer):
+    weekday = serializers.CharField(source="get_weekday_display")
+
+    class Meta:
+        model = Availability
+        fields = [
+            "id",
+            "weekday",
+            "start_time",
+            "end_time",
+        ]
+
+
+class TutorProfileSerializer(serializers.ModelSerializer):
+    country = serializers.CharField(source="country.name")
+    subjects = TutorSubjectReadSerializer(many=True, read_only=True)
+    availabilities = AvailabilityReadSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TutorCard
+        fields = [
+            "id",
+            "birth_date",
+            "experience_years",
+            "country",
+            "subjects",
+            "availabilities",
+        ]

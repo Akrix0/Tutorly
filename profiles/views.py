@@ -17,3 +17,12 @@ class TutorProfileCreateTemplateView(TemplateView):
         context["countries"] = list(countries)
 
         return context
+
+class TutorProfileDetailTemplateView(TemplateView):
+    template_name = "profiles/tutor_profile_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile_pk = self.kwargs.get("profile_pk")
+        context["profile_pk"] = profile_pk
+        return context
