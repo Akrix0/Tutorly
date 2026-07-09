@@ -1,6 +1,6 @@
 //* URLs
 const apiUrl = "/api"
-const homeURL = "/"
+const homeUrl = "/"
 const registerUrl = "/register/";
 const loginUrl = "/login/";
 const logoutUrl = "/logout/";
@@ -105,7 +105,7 @@ async function handleLoginSubmit(loginForm) {
     }
     try {
         await loginUser(data);
-        window.location.replace(homeURL);
+        window.location.replace(homeUrl);
     } catch (errors) {
         handleErrors(errors)
     }

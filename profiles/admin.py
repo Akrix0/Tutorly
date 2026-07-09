@@ -68,7 +68,7 @@ class TutorCardAdmin(admin.ModelAdmin):
 @admin.register(TutorSubject)
 class TutorSubjectAdmin(admin.ModelAdmin):
     list_display = (
-        "tutor",
+        "tutor_card",
         "subject",
         "price_per_hour",
     )
@@ -78,12 +78,12 @@ class TutorSubjectAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
-        "tutor__account__username",
+        "tutor_card__account__username",
         "subject__name",
     )
 
     autocomplete_fields = (
-        "tutor",
+        "tutor_card",
         "subject",
     )
 
@@ -91,7 +91,7 @@ class TutorSubjectAdmin(admin.ModelAdmin):
 @admin.register(Availability)
 class AvailabilityAdmin(admin.ModelAdmin):
     list_display = (
-        "tutor",
+        "tutor_card",
         "weekday",
         "start_time",
         "end_time",
@@ -102,9 +102,9 @@ class AvailabilityAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
-        "tutor__account__username",
+        "tutor_card__account__username",
     )
 
     autocomplete_fields = (
-        "tutor",
+        "tutor_card",
     )

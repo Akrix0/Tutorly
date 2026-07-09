@@ -1,0 +1,122 @@
+/* General page styling */
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f9fc;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1, h2 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+/* Form container */
+form {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Step navigation */
+.form-step {
+    display: none;
+}
+.form-step.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input fields */
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Subject and availability items */
+.subject-item, .availability-item {
+    background: #f0f4f8;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #dce3eb;
+}
+
+.subject-item button,
+.availability-item button {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.subject-item button:hover,
+.availability-item button:hover {
+    background: #c0392b;
+}
+
+/* Navigation buttons */
+button {
+    background: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 1em;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+#add-subject, #add-availability {
+    background: #2ecc71;
+}
+#add-subject:hover, #add-availability:hover {
+    background: #27ae60;
+}
+
+/* Error messages */
+#errors {
+    margin-top: 20px;
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Submit button */
+[type="submit"] {
+    background: #16a085;
+}
+[type="submit"]:hover {
+    background: #13856e;
+}

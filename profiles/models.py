@@ -31,7 +31,7 @@ class TutorCard(BaseModel):
         if self.experience_years >= self.age - 12:
             raise exceptions.InvalidDataError("experience_years")
         
-        if utils.get_age(self.age) <= 14:
+        if  self.age <= 14:
             raise exceptions.TooYoungError()
 
     def __str__(self):
@@ -88,7 +88,7 @@ class Availability(BaseModel):
     tutor_card = models.ForeignKey(
         TutorCard,
         on_delete=models.CASCADE,
-        related_name="availability",
+        related_name="availabilities",
     )
     weekday = models.PositiveSmallIntegerField(
         choices=WeekDay.choices

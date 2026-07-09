@@ -25,7 +25,11 @@ class TutorProfileCreateSerializer(serializers.ModelSerializer):
         fields = ["birth_date", "experience_years", "country", "subjects", "availabilities"]
 
     def validate(self, attrs):
-        if utils.get_age(attrs["birth_date"]) <= 14:
+        age = utils.get_age(attrs["birth_date"])
+        if attrs["experience_years"] >= age - 12:
+            raise exceptions.InvalidDataError("experience_years")
+
+        if age <= 14:
             raise exceptions.TooYoungError()
 
         availabilities = attrs["availabilities"]
