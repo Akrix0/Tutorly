@@ -1,86 +1,85 @@
-//* Display forms from templates
+//* Elements
 const subjectsContainer = document.querySelector("#subjects-container");
-const subjectTemplate = document.querySelector("#subject-template");
-
-subjectsContainer.appendChild(subjectTemplate.content.cloneNode(true));
-
 const availabilitiesContainer = document.querySelector("#availabilities-container");
+
+const subjectTemplate = document.querySelector("#subject-template");
 const availabilityTemplate = document.querySelector("#availability-template");
 
-availabilitiesContainer.appendChild(availabilityTemplate.content.cloneNode(true));
+const globalForm = document.getElementById("tutor-profile-form");
+const tutorCardContainer = document.getElementById("tutor-card-container");
 
-document.getElementById("next-step-1").addEventListener("click", () => {
-    nextStep(2);
-});
-
-document.getElementById("prev-step-2").addEventListener("click", () => {
-    prevStep(1);
-});
-
-document.getElementById("next-step-2").addEventListener("click", () => {
-    nextStep(3);
-});
-
-document.getElementById("prev-step-3").addEventListener("click", () => {
-    prevStep(2);
-});
-
-//! Deleting and Adding items
-
-//* Deleting and adding subject items
-subjectsContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("remove-subject")) {
-        e.target.closest(".subject-item").remove();
-    }
-});
-
-const addSubjectsBtn = document.getElementById("add-subject");
-addSubjectsBtn.addEventListener("click", (e) => {
-    subjectsContainer.appendChild(subjectTemplate.content.cloneNode(true));
-})
-
-//* Deleting and adding availabilities items
-availabilitiesContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("remove-availability")) {
-        e.target.closest(".availability-item").remove();
-    }
-});
-
+const addSubjectBtn = document.getElementById("add-subject");
 const addAvailabilityBtn = document.getElementById("add-availability");
-addAvailabilityBtn.addEventListener("click", (e) => {
-    availabilitiesContainer.appendChild(availabilityTemplate.content.cloneNode(true));
-})
 
-//! Function to move between forms
+//* URLs
+const HOME_URL = "/";
+const TUTOR_PROFILE_CREATE_URL = "/profiles/api/profile/create/";
 
-//* Function to move to next step of form
-function nextStep(step) {
-    const currentStep = document.getElementById(`step${step - 1}`);
+//* Helpers
+function appendTemplate(container, template) {
+    container.appendChild(template.content.cloneNode(true));
+}
 
-    const fields = currentStep.querySelectorAll("input, select, textarea");
+function removeItem(event, className, itemClass) {
+    if (event.target.classList.contains(className)) {
+        event.target.closest(itemClass).remove();
+    }
+}
 
-    for (const field of fields) {
+function getSubjectData(item) {
+    return {
+        subject: Number(item.querySelector("[name='subject']").value),
+        price_per_hour: item.querySelector("[name='price-per-hour']").value,
+        currency: item.querySelector("[name='currency']").value,
+    };
+}
+
+function getAvailabilityData(item) {
+    return {
+        weekday: Number(item.querySelector("[name='weekday']").value),
+        start_time: item.querySelector("[name='start-time']").value,
+        end_time: item.querySelector("[name='end-time']").value,
+    };
+}
+
+function validateStep(step) {
+    const currentStep = document.getElementById(`step${step}`);
+
+    for (const field of currentStep.querySelectorAll("input, select, textarea")) {
         if (!field.checkValidity()) {
             field.reportValidity();
-            return;
+            return false;
         }
     }
 
-    currentStep.classList.remove("active");
+    return true;
+}
+
+function showStep(step) {
+    document.querySelector(".form-step.active")?.classList.remove("active");
     document.getElementById(`step${step}`).classList.add("active");
 }
 
-//* Function to move to previous step of form
+function nextStep(step) {
+    if (!validateStep(step - 1)) {
+        return;
+    }
+
+    showStep(step);
+}
+
 function prevStep(step) {
-    document.getElementById(`step${step + 1}`).classList.remove("active");
-    document.getElementById(`step${step}`).classList.add("active");
+    showStep(step);
 }
 
 function handleErrors(errors) {
     console.error(errors);
+
     let message = "";
+
     for (const [field, fieldErrors] of Object.entries(errors)) {
         message += `${field}:\n`;
+
         if (typeof fieldErrors === "string") {
             message += `${fieldErrors}\n`;
         } else {
@@ -88,26 +87,25 @@ function handleErrors(errors) {
                 message += ` • ${error}\n`;
             }
         }
+
         message += "\n";
     }
+
     alert(message);
 }
 
-const homeUrl = "/"
-const loginUrl = "/login/";
-const tutorProfileCreateUrl = "/profiles/api/profile/create/"
-
-
-//?|———————————————————CREATE—TUTOR—PROFILE———————————————————|
-
-//* Function to create tutor profile
+//* API
 async function createTutorProfile(formData) {
     const token = localStorage.getItem("access");
-    if (!token) {return}
-    const response = await fetch(tutorProfileCreateUrl, {
+
+    if (!token) {
+        return;
+    }
+
+    const response = await fetch(TUTOR_PROFILE_CREATE_URL, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
@@ -122,27 +120,15 @@ async function createTutorProfile(formData) {
     return result;
 }
 
-
-//* Function to handle tutor profile creation form
-async function handleTutorProfileCreationSubmit(tutorCardContainer, subjectsContainer, availabilitiesContainer,) {
-    const subjects = [...subjectsContainer.children].map(item => ({
-        subject: Number(item.querySelector("[name='subject']").value),
-        price_per_hour: item.querySelector("[name='price-per-hour']").value,
-        currency: item.querySelector("[name='currency']").value,
-    }));
-
-    const availabilities = [...availabilitiesContainer.children].map(item => ({
-        weekday: Number(item.querySelector("[name='weekday']").value),
-        start_time: item.querySelector("[name='start-time']").value,
-        end_time: item.querySelector("[name='end-time']").value,
-    }));
+//* Event Handlers
+async function handleTutorProfileCreationSubmit(form) {
+    const subjects = [...subjectsContainer.children].map(getSubjectData);
+    const availabilities = [...availabilitiesContainer.children].map(getAvailabilityData);
 
     const data = {
-        birth_date: tutorCardContainer.elements["birth-date"].value,
-        experience_years: Number(
-            tutorCardContainer.elements["experience-years"].value
-        ),
-        country: tutorCardContainer.elements["country"].value,
+        birth_date: form.elements["birth-date"].value,
+        experience_years: Number(form.elements["experience-years"].value),
+        country: form.elements["country"].value,
         subjects,
         availabilities,
     };
@@ -150,18 +136,40 @@ async function handleTutorProfileCreationSubmit(tutorCardContainer, subjectsCont
     try {
         await createTutorProfile(data);
         console.log("Tutor profile created");
-        window.location.href = homeUrl;
+        window.location.href = HOME_URL;
     } catch (errors) {
         handleErrors(errors);
     }
 }
 
-const globalForm = document.getElementById("tutor-profile-form")
-const tutorCardContainer = document.getElementById("tutor-card-container");
+//* Init
+appendTemplate(subjectsContainer, subjectTemplate);
+appendTemplate(availabilitiesContainer, availabilityTemplate);
+
+document.getElementById("next-step-1").addEventListener("click", () => nextStep(2));
+document.getElementById("next-step-2").addEventListener("click", () => nextStep(3));
+document.getElementById("prev-step-2").addEventListener("click", () => prevStep(1));
+document.getElementById("prev-step-3").addEventListener("click", () => prevStep(2));
+
+subjectsContainer.addEventListener("click", (event) => {
+    removeItem(event, "remove-subject", ".subject-item");
+});
+
+availabilitiesContainer.addEventListener("click", (event) => {
+    removeItem(event, "remove-availability", ".availability-item");
+});
+
+addSubjectBtn.addEventListener("click", () => {
+    appendTemplate(subjectsContainer, subjectTemplate);
+});
+
+addAvailabilityBtn.addEventListener("click", () => {
+    appendTemplate(availabilitiesContainer, availabilityTemplate);
+});
 
 if (subjectsContainer && availabilitiesContainer && tutorCardContainer) {
     globalForm.addEventListener("submit", async (event) => {
         event.preventDefault();
-        await handleTutorProfileCreationSubmit(globalForm, subjectsContainer, availabilitiesContainer);
+        await handleTutorProfileCreationSubmit(globalForm);
     });
-} 
+}

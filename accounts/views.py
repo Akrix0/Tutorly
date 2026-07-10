@@ -1,16 +1,19 @@
 from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from core import mixins
 
 class HomeTemplateView(TemplateView):
     template_name = "accounts/home.html"
 
 
-class RegisterTemplateView(TemplateView):
+class RegisterTemplateView(mixins.IsAnonymousMixin, TemplateView):
     template_name = "accounts/register.html"
 
 
-class LoginTemplateView(TemplateView):
+class LoginTemplateView(mixins.IsAnonymousMixin, TemplateView):
     template_name = "accounts/login.html"
 
 
-class LogoutTemplateView(TemplateView):
+class LogoutTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/logout.html"

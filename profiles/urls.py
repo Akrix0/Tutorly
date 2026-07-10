@@ -9,5 +9,5 @@ urlpatterns = [
 
     # API
     path("api/profile/create/", api_views.TutorProfileCreateView.as_view(), name="tutor_profile_create_api"),
-    path('api/profile/<int:profile_pk>/', api_views.TutorProfileDetailView.as_view(), name="tutor_profile_detail"),
+    path('api/profile/<int:profile_pk>/', api_views.TutorProfileDetailView.as_view(), name="tutor_profile_detail_api"),
 ]

@@ -1,15 +1,24 @@
 //* URLs
-const apiUrl = "/api"
-const homeUrl = "/"
+const apiUrl = "/api";
+const homeUrl = "/";
 const registerUrl = "/register/";
 const loginUrl = "/login/";
 const logoutUrl = "/logout/";
 
+//* Elements
+const registerForm = document.getElementById("register-form");
+const loginForm = document.getElementById("login-form");
+const logoutForm = document.getElementById("logout-form");
+
+//* Helpers
 function handleErrors(errors) {
     console.error(errors);
+
     let message = "";
+
     for (const [field, fieldErrors] of Object.entries(errors)) {
         message += `${field}:\n`;
+
         if (typeof fieldErrors === "string") {
             message += `${fieldErrors}\n`;
         } else {
@@ -17,25 +26,20 @@ function handleErrors(errors) {
                 message += ` • ${error}\n`;
             }
         }
+
         message += "\n";
     }
+
     alert(message);
 }
 
-//!/——————————————————————————————————————————————\
-//!|———————————————————FUNCTIONS———————————————————|
-//!\——————————————————————————————————————————————/
-
-//?|———————————————————REGISTER———————————————————|
-
-//* Function to register user
-async function registerUser(formData) {
-    const response = await fetch(apiUrl + registerUrl, {
+async function postJson(url, data) {
+    const response = await fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
     });
 
     const result = await response.json();
@@ -47,131 +51,101 @@ async function registerUser(formData) {
     return result;
 }
 
-//* Function to handle register form
-async function handleRegisterSubmit(registerForm) {
-    const data = {
-        username: registerForm.elements["username"].value.trim(),
-        email: registerForm.elements["email"].value,
-        password: registerForm.elements["password"].value,
-        password2: registerForm.elements["password2"].value,
-    };
-    if (!data.username || !data.email || !data.password || !data.password2) {
-        alert("Заповніть усі поля");
-        return;
-    }
-    try {
-        await registerUser(data);
-        console.log("Користувача створено");
-        window.location.href = loginUrl;
-    } catch (errors) {
-        handleErrors(errors)
-    }
+//* API
+async function registerUser(formData) {
+    return postJson(apiUrl + registerUrl, formData);
 }
 
-//?|———————————————————LOGIN———————————————————|
-
-//* Function to login user
 async function loginUser(formData) {
-    const response = await fetch(apiUrl + loginUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-    });
+    const result = await postJson(apiUrl + loginUrl, formData);
 
-    const result = await response.json();
-
-    if (!response.ok) {
-        throw result;
-    }
-    
     localStorage.setItem("access", result.access);
     localStorage.setItem("refresh", result.refresh);
 
-
     return result;
 }
 
-//* Function to handle login form
-async function handleLoginSubmit(loginForm) {
-    const data = {
-        username: loginForm.elements["username"].value.trim(),
-        password: loginForm.elements["password"].value,
-    };
-    if (!data.username || !data.password) {
-        alert("Заповніть усі поля");
-        return;
-    }
-    try {
-        await loginUser(data);
-        window.location.replace(homeUrl);
-    } catch (errors) {
-        handleErrors(errors)
-    }
-}
-
-//?|———————————————————LOGOUT———————————————————|
-
-//* Function to logout user
 async function logoutUser() {
-    const refresh = localStorage.getItem("refresh")
+    const refresh = localStorage.getItem("refresh");
 
     if (!refresh) {
         return;
     }
 
-    const response = await fetch(apiUrl + logoutUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            refresh
-        }),
-    });
+    const result = await postJson(apiUrl + logoutUrl, { refresh });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-        throw result;
-    }
-    
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
 
     return result;
 }
 
-//* Function to handle logout
-async function handleLogoutSubmit() {
+//* Event Handlers
+async function handleRegisterSubmit(form) {
+    const data = {
+        username: form.elements.username.value.trim(),
+        email: form.elements.email.value,
+        password: form.elements.password.value,
+        password2: form.elements.password2.value,
+    };
+
+    if (!data.username || !data.email || !data.password || !data.password2) {
+        alert("Заповніть усі поля");
+        return;
+    }
+
     try {
-        
-        await logoutUser();
+        await registerUser(data);
+        console.log("Користувача створено");
         window.location.href = loginUrl;
     } catch (errors) {
-        handleErrors(errors)
+        handleErrors(errors);
     }
 }
 
-//* Forms
-const registerForm = document.getElementById("register-form");
-const loginForm = document.getElementById("login-form");
-const logoutForm = document.getElementById("logout-form");
+async function handleLoginSubmit(form) {
+    const data = {
+        username: form.elements.username.value.trim(),
+        password: form.elements.password.value,
+    };
 
+    if (!data.username || !data.password) {
+        alert("Заповніть усі поля");
+        return;
+    }
 
-if (registerForm) {
-    registerForm.addEventListener("submit", async (event) => {
+    try {
+        await loginUser(data);
+        window.location.replace(homeUrl);
+    } catch (errors) {
+        handleErrors(errors);
+    }
+}
+
+async function handleLogoutSubmit() {
+    try {
+        await logoutUser();
+        window.location.href = loginUrl;
+    } catch (errors) {
+        handleErrors(errors);
+    }
+}
+
+function bindFormSubmit(form, handler) {
+    if (!form) {
+        return;
+    }
+
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
-        await handleRegisterSubmit(registerForm);
-    });
-} 
-if (loginForm) {
-    loginForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        await handleLoginSubmit(loginForm);
+        await handler(form);
     });
 }
+
+//* Init
+bindFormSubmit(registerForm, handleRegisterSubmit);
+bindFormSubmit(loginForm, handleLoginSubmit);
+
 if (logoutForm) {
     logoutForm.addEventListener("submit", async (event) => {
         event.preventDefault();

@@ -1,14 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 <div class="container">
-    <a class="navbar-brand" href="/"><i class="bi bi-book"></i> Tutorly</a>
+    <a class="navbar-brand" href="{% url "accounts:home" %}"><i class="bi bi-book"></i> Tutorly</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
         <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="{% url "accounts:home" %}">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="profiles/profile/create/">Tutor Profile Create</a>
+            <a class="nav-link" href="{% url "profiles:tutor_profile_create" %}">Tutor Profile Create</a>
         </li>
         </ul>
         <ul class="navbar-nav">
@@ -17,7 +17,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle"></i> {{ user.username }}</a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li>
-                <a class="dropdown-item" href="/profiles/profile/{{ user.tutor_card.pk }}/">Profile</a>
+                <a class="dropdown-item" href="{% url "profiles:tutor_profile_detail" profile_pk=user.tutor_card.pk %}">Profile</a>
                 </li>
                 <li>
                 <hr class="dropdown-divider" />

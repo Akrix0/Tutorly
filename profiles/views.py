@@ -1,11 +1,13 @@
 from django.views.generic import TemplateView
+
 from django_countries import countries
 
 from .models import Subject, Availability
 from core.models import Currency
+from core import mixins
 
 
-class TutorProfileCreateTemplateView(TemplateView):
+class TutorProfileCreateTemplateView(mixins.IsTutorMixin, mixins.HasNoTutorCardMixin, TemplateView):
     template_name = "profiles/tutor_profile_create.html"
 
     def get_context_data(self, **kwargs):
@@ -18,11 +20,10 @@ class TutorProfileCreateTemplateView(TemplateView):
 
         return context
 
-class TutorProfileDetailTemplateView(TemplateView):
+class TutorProfileDetailTemplateView(mixins.IsTutorMixin, TemplateView):
     template_name = "profiles/tutor_profile_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile_pk = self.kwargs.get("profile_pk")
-        context["profile_pk"] = profile_pk
+        context["profile_pk"] = self.kwargs["profile_pk"]
         return context
