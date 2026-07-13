@@ -1,5 +1,9 @@
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class IsAnonymousMixin:
     """Allow access only to anonymous users."""
@@ -7,7 +11,7 @@ class IsAnonymousMixin:
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             messages.warning(request, "You must be logged out to view this page.")
-            return redirect("profiles:tutor_profile_detail", profile_pk=request.user.tutor_card.pk)
+            return redirect("accounts:account_detail", slug=request.user.slug)
         return super().dispatch(request, *args, **kwargs)
 
 class IsTutorMixin:
@@ -27,5 +31,16 @@ class HasNoTutorCardMixin:
         tutor_card = getattr(request.user, "tutor_card", None)
         if tutor_card is not None:
             messages.warning(request, "You must not have tutor card to view this page.")
-            return redirect("profiles:tutor_profile_detail", profile_pk=request.user.tutor_card.pk)
+            return redirect("accounts:account_detail", slug=request.user.slug)
+        return super().dispatch(request, *args, **kwargs)
+
+
+class IsRequestUserMixin:
+    """Allow access only to page's owner account."""
+
+    def dispatch(self, request, *args, **kwargs):
+        account = get_object_or_404(User, slug = kwargs["slug"])
+        if account != request.user:
+            messages.warning(request, "You can only access your own account page.")
+            return redirect("accounts:account_detail", slug=request.user.slug)
         return super().dispatch(request, *args, **kwargs)

@@ -42,3 +42,21 @@ class UserLogoutSerializer(serializers.Serializer):
         except TokenError:
             raise exceptions.InvalidRefreshTokenError()
         return attrs
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "slug",
+            "bio",
+            "avatar",
+        ]
+        read_only_fields = [
+            "id",
+            "slug",
+        ]

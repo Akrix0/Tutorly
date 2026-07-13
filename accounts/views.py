@@ -17,3 +17,11 @@ class LoginTemplateView(mixins.IsAnonymousMixin, TemplateView):
 
 class LogoutTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/logout.html"
+
+
+class AccountDetailView(mixins.IsRequestUserMixin, TemplateView):
+    template_name = "accounts/account_detail.html"
+
+
+class AccountEditView(mixins.IsRequestUserMixin, TemplateView):
+    template_name = "accounts/account_edit.html"

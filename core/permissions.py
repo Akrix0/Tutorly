@@ -20,4 +20,10 @@ class HasNoTutorCard(BasePermission):
     message = "One tutor card per tutor."
 
     def has_permission(self, request, view):
-        return not TutorCard.objects.filter(account=request.user).exists()
+        return not hasattr(request.user, "tutor_card")
+
+class IsRequestUser(BasePermission):
+    message = "Only owner can enter their account page."
+
+    def has_object_permission(self, request, view, obj):
+        return obj == request.user
