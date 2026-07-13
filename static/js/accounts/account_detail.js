@@ -1,3 +1,6 @@
+//* Imports
+import {apiFetch} from "../api.js"
+
 //* Elements
 const accountContainer = document.getElementById("account-profile")
 const avatarWrapper = document.getElementById("avatar-wrapper");
@@ -17,7 +20,7 @@ async function getAccountData() {
     const token = localStorage.getItem("access");
     if (!token) return null;
 
-    const response = await fetch(accountUrl, {
+    const response = await apiFetch(accountUrl, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

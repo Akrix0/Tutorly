@@ -1,3 +1,6 @@
+//* Imports
+import {apiFetch} from "../api.js"
+
 //* Elements
 const subjectsContainer = document.querySelector("#subjects-container");
 const availabilitiesContainer = document.querySelector("#availabilities-container");
@@ -12,8 +15,8 @@ const addSubjectBtn = document.getElementById("add-subject");
 const addAvailabilityBtn = document.getElementById("add-availability");
 
 //* URLs
-const HOME_URL = "/";
-const TUTOR_PROFILE_CREATE_URL = "/profiles/api/profile/create/";
+const homeUrl = "/";
+const tutorProfileCreateUrl = "/profiles/api/profile/create/";
 
 //* Helpers
 function appendTemplate(container, template) {
@@ -102,7 +105,7 @@ async function createTutorProfile(formData) {
         return;
     }
 
-    const response = await fetch(TUTOR_PROFILE_CREATE_URL, {
+    const response = await apiFetch(tutorProfileCreateUrl, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,
@@ -136,7 +139,7 @@ async function handleTutorProfileCreationSubmit(form) {
     try {
         await createTutorProfile(data);
         console.log("Tutor profile created");
-        window.location.href = HOME_URL;
+        window.location.href = homeUrl;
     } catch (errors) {
         handleErrors(errors);
     }

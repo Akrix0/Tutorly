@@ -14,7 +14,7 @@ async function getTutorProfileData() {
     const token = localStorage.getItem("access");
     if (!token) return null;
 
-    const response = await fetch(tutorProfileDetailUrl, {
+    const response = await apiFetch(tutorProfileDetailUrl, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

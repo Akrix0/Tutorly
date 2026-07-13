@@ -1,3 +1,6 @@
+//* Imports
+import {apiFetch} from "../api.js"
+
 //* Elements
 const accountEditForm = document.getElementById("account-edit-form");
 
@@ -30,7 +33,7 @@ async function getAccountData() {
     const token = localStorage.getItem("access");
     if (!token) return null;
 
-    const response = await fetch(accountUrl, {
+    const response = await apiFetch(accountUrl, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -49,7 +52,7 @@ async function editAccount(formData) {
     const token = localStorage.getItem("access");
     if (!token) return null;
 
-    const response = await fetch(accountUrl, {
+    const response = await apiFetch(accountUrl, {
         method: "PATCH",
         headers: {
             Authorization: `Bearer ${token}`,
