@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Tutor Profile Create
+{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/profiles/styles.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+<h1>Create Tutor Profile</h1>
+
+<form id="tutor-profile-form">
+
+    <div class="form-step active" id="step1">
+        <h2>1. Subjects</h2>
+
+        <div id="subjects-container">
+        </div>
+
+        <button type="button" id="add-subject">+ Add Subject</button>
+        <button type="button" id="next-step-1">Next</button>
+    </div>
+
+    <div class="form-step" id="step2">
+        <h2>2. Availability</h2>
+
+        <div id="availabilities-container">
+        </div>
+
+        <button type="button" id="add-availability">+ Add Availability</button>
+        <button type="button" id="prev-step-2">Previous</button>
+        <button type="button" id="next-step-2">Next</button>
+    </div>
+
+    <div class="form-step" id="step3">
+        <h2>3. Tutor Information</h2>
+
+        <div id="tutor-card-container">
+            <div>
+                <label>Birth date</label><br>
+                <input type="date" name="birth-date" id="birth-date" required>
+            </div>
+
+            <div>
+                <label>Experience years</label><br>
+                <input type="number" name="experience-years" id="experience-years" min="0" max="100" required>
+            </div>
+
+            <div>
+                <label>Country</label><br>
+                <select id="country" name="country">
+                    {% for code, name in countries %}
+                        <option value="{{ code }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <button type="button" id="prev-step-3">Previous</button>
+        <button type="submit">Create Tutor Profile</button>
+    </div>
+
+</form>
+
+<div id="errors d-none"></div>
+
+<template id="subject-template">
+    <div class="subject-item">
+
+        <div>
+            <label>Subject</label><br>
+            <select class="subject" name="subject" required >
+                {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label>Price / hour</label><br>
+            <input
+                type="number"
+                class="price-per-hour"
+                name="price-per-hour"
+                min="1"
+                step="0.01"
+                required
+            >
+        </div>
+
+        <div>
+            <label>Currency</label><br>
+            <select class="currency" name="currency" required>
+                {% for value, label in currencies %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="button" class="remove-subject">
+            Remove
+        </button>
+
+    </div>
+</template>
+
+<template id="availability-template">
+    <div class="availability-item">
+
+        <div>
+            <label>Weekday</label><br>
+            <select class="weekday" name="weekday" required>
+                {% for value, label in weekdays %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label>Start time</label><br>
+            <input
+                type="time"
+                class="start-time"
+                name="start-time"
+                required
+            >
+        </div>
+
+        <div>
+            <label>End time</label><br>
+            <input
+                type="time"
+                class="end-time"
+                name="end-time"
+                required
+            >
+        </div>
+
+        <button type="button" class="remove-availability">
+            Remove
+        </button>
+
+    </div>
+</template>
+
+<script type="module" src="{% static 'js/profiles/tutor_profile_create.js' %}"></script>
+
+{% endblock %}

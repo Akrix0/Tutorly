@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Logout
+{% endblock %}
+
+{% block content %}
+
+<h1>Logout</h1>
+
+<form id="logout-form">
+    <h2>Are you sure you want logout from your Account?</h2>
+
+    <button type="submit" id="logout-btn">
+        Logout
+    </button>
+</form>
+
+<div id="errors"></div>
+
+{% load static %}
+<script src="{% static 'js/accounts/auth.js' %}"></script>
+
+{% endblock content %}

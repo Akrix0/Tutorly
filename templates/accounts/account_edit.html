@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    {{ user.username }} Edit page
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ user.username }} Edit</h1>
+
+<form 
+    id="account-edit-form" 
+    data-account-url="{% url "accounts:account_api" slug=user.slug %}"
+    data-account-detail="{% url "accounts:account_detail" slug=user.slug %}">
+    <div>
+        <label for="username">Username</label><br>
+        <input
+            type="text"
+            id="username"
+            name="username"
+            maxlength="128"
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="email">Email</label><br>
+        <input
+            type="email"
+            id="email"
+            name="email"
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="first-name">First name</label><br>
+        <input
+            type="text"
+            id="first-name"
+            name="first-name"
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="last-name">Last name</label><br>
+        <input
+            type="text"
+            id="last-name"
+            name="last-name"
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="bio">Bio</label><br>
+        <input
+            type="text"
+            id="bio"
+            name="bio"
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="avatar">Avatar</label><br>
+        <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept="image/*"
+        >
+    </div>
+
+    <br>
+
+    <button type="submit" id="account-edit-btn">
+        Conrifm changes
+    </button>
+</form>
+
+<div id="errors"></div>
+
+{% load static %}
+<script src="{% static 'js/accounts/account_edit.js' %}"></script>
+
+{% endblock content %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ user.username }} | Profile
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-page" 
+        id="account-profile" 
+        data-account-url = "{% url "accounts:account_api" slug=user.slug %}">
+
+    <section class="profile-header">
+
+        <div class="profile-avatar-wrapper" id="avatar-wrapper">
+            <img
+                id="avatar"
+                class="profile-avatar"
+                src="{% static 'images/default-avatar.png' %}"
+                alt="User avatar"
+            >
+        </div>
+
+        <div class="profile-main">
+            <h1 id="username">Loading...</h1>
+            <p id="bio" class="profile-bio">No bio yet.</p>
+        </div>
+
+    </section>
+
+    <section class="profile-card">
+        <div class="d-flex justify-content-between">
+            <h2>Profile Information</h2>
+            
+            <a class="btn btn-warning" 
+                href="{% url "accounts:account_edit" slug=user.slug %}"
+                role="button">Edit Profile
+            </a>
+        </div>
+
+        <div class="profile-field">
+            <span class="label">Email</span>
+            <span class="value" id="email"></span>
+        </div>
+
+        <div class="profile-field">
+            <span class="label">First name</span>
+            <span class="value" id="first-name"></span>
+        </div>
+
+        <div class="profile-field">
+            <span class="label">Last name</span>
+            <span class="value" id="last-name"></span>
+        </div>
+
+    </section>
+
+    <div id="errors" class="errors"></div>
+
+</div>
+
+<script type="module" src="{% static 'js/accounts/account_detail.js' %}"></script>
+
+{% endblock %}
