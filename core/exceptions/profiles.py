@@ -1,5 +1,5 @@
+# exceptions/profiles.py
 from django.core.exceptions import ValidationError
-from rest_framework_simplejwt.tokens import TokenError
 
 class TutorRoleError(ValidationError):
     """Raised when the selected account is not a tutor."""
@@ -14,6 +14,7 @@ class StudentRoleError(ValidationError):
         super().__init__({
             "student": "Selected account must have Student role."
         })
+
 
 class InvalidTimeRangeError(ValidationError):
     """Raised when the end time is earlier than the start time."""
@@ -55,6 +56,7 @@ class DuplicateSubjectsError(ValidationError):
             "subject": "Two same subjects were provided."
         })
 
+
 class NotTutorSubjectError(ValidationError):
     """Raised when selected subject does not belong to selected tutor."""
     def __init__(self):
@@ -62,30 +64,10 @@ class NotTutorSubjectError(ValidationError):
                 "subject": "The selected subject does not belong to this tutor."
         })
 
+
 class TutorSubjectExistsError(ValidationError):
     """Raised when selected subject already exists for this tutor."""
     def __init__(self):
         super().__init__({
                 "subject": "The selected subject already exists for this tutor."
-        })
-
-class NoCompletedLessonError(ValidationError):
-    """Raised when student tries to create review to tutor they had no lesson with."""
-    def __init__(self):
-        super().__init__({
-            "lesson": "Student has no completed lessons with this tutor."
-        })
-
-class PasswordMismatchError(ValidationError):
-    """Raised when password and confirm password doesn't match."""
-    def __init__(self):
-        super().__init__({
-            "password": "Password and confirm password doesn't match."
-        })
-
-class InvalidRefreshTokenError(TokenError):
-    """Raised when invalid refresh token is provided."""
-    def __init__(self):
-        super().__init__({
-            "token": "Invalid refresh token."
         })

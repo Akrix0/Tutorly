@@ -1,7 +1,5 @@
 from django.db import models
-from django.core.exceptions import ValidationError
-
-from core import exceptions
+from core.exceptions import profiles
 from core.models import BaseModel
 from accounts.models import Account
 from profiles.models import TutorSubject
@@ -28,16 +26,16 @@ class Lesson(BaseModel):
         super().clean()
 
         if self.tutor.role != Account.UserRole.TUTOR:
-            raise exceptions.TutorRoleError()
+            raise profiles.TutorRoleError()
 
         if self.student.role != Account.UserRole.STUDENT:
-            raise exceptions.StudentRoleError()
+            raise profiles.StudentRoleError()
 
         if self.start_time >= self.end_time:
-            raise exceptions.InvalidTimeRangeError()
+            raise profiles.InvalidTimeRangeError()
         
         if self.subject.tutor.account != self.tutor:
-            raise exceptions.NotTutorSubjectError()
+            raise profiles.NotTutorSubjectError()
         
     class Meta:
         ordering = [
