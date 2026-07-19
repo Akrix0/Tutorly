@@ -26,6 +26,14 @@ class Account(AbstractUser, BaseModel):
     def __str__(self):
         return f"{self.username} ({self.get_role_display()})"
     
+    @property
+    def is_student(self):
+        return self.role == self.UserRole.STUDENT
+
+    @property
+    def is_tutor(self):
+        return self.role == self.UserRole.TUTOR
+    
     class Meta:
         verbose_name = "Account"
         verbose_name_plural = "Accounts"

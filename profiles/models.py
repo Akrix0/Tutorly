@@ -129,6 +129,10 @@ class TutorSubject(BaseModel):
     def __str__(self):
         return f"{self.subject.get_name_display()} for {self.tutor_card.account.username} at ${self.price_per_hour}/hour"
 
+    @property
+    def subject_name(self):
+        return self.subject.get_name_display()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(

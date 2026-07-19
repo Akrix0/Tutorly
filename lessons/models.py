@@ -1,8 +1,13 @@
 from django.db import models
-from core.exceptions import profiles
+
+from core.exceptions import profiles, lessons
 from core.models import BaseModel
 from accounts.models import Account
 from profiles.models import TutorSubject
+
+from datetime import datetime
+from django.utils import timezone
+
 
 class Lesson(BaseModel):
     class LessonStatus(models.TextChoices):
@@ -22,6 +27,10 @@ class Lesson(BaseModel):
     def __str__(self):
         return f"{self.subject} with {self.tutor.username} for {self.student.username} on {self.date}"
     
+    @property
+    def title(self):
+        return f"{self.subject.subject_name} Lesson for {self.student.username} with {self.tutor.username}"
+    
     def clean(self):
         super().clean()
 
@@ -34,8 +43,37 @@ class Lesson(BaseModel):
         if self.start_time >= self.end_time:
             raise profiles.InvalidTimeRangeError()
         
-        if self.subject.tutor.account != self.tutor:
+        if self.subject.tutor_card.account != self.tutor:
             raise profiles.NotTutorSubjectError()
+        
+        lesson_datetime = timezone.make_aware(
+            datetime.combine(self.date, self.start_time)
+        )
+
+        if lesson_datetime < timezone.now():
+            raise profiles.LessonInPastError()
+        
+        has_availability = self.tutor.tutor_card.availabilities.filter(
+            weekday=self.date.isoweekday(),
+            start_time__lte=self.start_time,
+            end_time__gte=self.end_time,
+        ).exists()
+
+        if not has_availability:
+            raise profiles.TutorNotAvailableError()
+
+        has_conflict = Lesson.objects.filter(
+            tutor=self.tutor,
+            date=self.date,
+        ).exclude(
+            pk=self.pk,
+        ).filter(
+            start_time__lt=self.end_time,
+            end_time__gt=self.start_time,
+        ).exists()
+
+        if has_conflict:
+            raise lessons.LessonTimeConflictError()
         
     class Meta:
         ordering = [
