@@ -7,9 +7,16 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url "accounts:home" %}">Home</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url "profiles:tutor_profile_create" %}">Tutor Profile Create</a>
-        </li>
+        {% if user.is_authenticated and user.is_tutor and not user.tutor_card %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "profiles:tutor_profile_create" %}">Tutor Profile Create</a>
+            </li>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "lessons:lesson_list" %}">Your lessons</a>
+            </li>
+        {% endif %}
         </ul>
         <ul class="navbar-nav">
         {% if user.is_authenticated %}

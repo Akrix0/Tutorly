@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError as DjangoValidationError
 
+from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,6 +10,7 @@ from rest_framework import status
 from . import serializers
 from .models import Lesson
 from core import permissions 
+
 
 User = get_user_model()
 
@@ -45,7 +48,10 @@ class LessonViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        lesson = serializer.save(tutor=request.user)
+        try:
+            lesson = serializer.save(tutor=request.user)
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
         return Response(
             serializers.LessonReadSerializer(

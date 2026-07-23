@@ -51,7 +51,7 @@ class Lesson(BaseModel):
         )
 
         if lesson_datetime < timezone.now():
-            raise profiles.LessonInPastError()
+            raise lessons.LessonInPastError()
         
         has_availability = self.tutor.tutor_card.availabilities.filter(
             weekday=self.date.isoweekday(),
@@ -60,7 +60,7 @@ class Lesson(BaseModel):
         ).exists()
 
         if not has_availability:
-            raise profiles.TutorNotAvailableError()
+            raise lessons.TutorNotAvailableError()
 
         has_conflict = Lesson.objects.filter(
             tutor=self.tutor,

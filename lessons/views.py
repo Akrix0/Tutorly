@@ -33,7 +33,6 @@ class LessonDetailView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["lesson_pk"] = self.kwargs["lesson_pk"]
         lesson = get_object_or_404(Lesson, id=context["lesson_pk"])
         context["lesson"] = lesson
         return context
@@ -43,5 +42,11 @@ class LessonEditView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["lesson_pk"] = self.kwargs["lesson_pk"]
+        lesson = get_object_or_404(Lesson, id=context["lesson_pk"])
+        context["lesson"] = lesson
+        student_account = get_object_or_404(User, id=lesson.student.id)
+        context["student"] = student_account
+        context["subject"] = TutorSubject.objects.filter(
+            tutor_card__account=self.request.user
+        )
         return context

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Lesson List
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="mb-1">My Lessons</h1>
+            <p class="text-muted mb-0">List of all your lessons</p>
+        </div>
+    </div>
+
+    <div id="lessons-list-container"
+    data-lesson-list-url="{% url "lessons:lesson-list" %}"></div>
+
+    <div id="empty-state" class="text-center py-5 d-none">
+        <h4 class="text-muted">No lessons found</h4>
+        <p class="text-muted">You don't have any lessons yet.</p>
+    </div>
+</div>
+
+<template id="lesson-template">
+    <div class="card shadow-sm border-0 mb-3 lesson-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h4 class="lesson-title mb-1"></h4>
+                    <span class="badge lesson-status"></span>
+                </div>
+
+                <small class="text-muted">
+                    ID: <span class="lesson-id"></span>
+                </small>
+            </div>
+
+            <hr>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <small class="text-muted">Tutor</small>
+                    <p class="mb-0 lesson-tutor"></p>
+                </div>
+
+                <div class="col-md-4">
+                    <small class="text-muted">Student</small>
+                    <p class="mb-0 lesson-student"></p>
+                </div>
+
+                <div class="col-md-4">
+                    <small class="text-muted">Subject</small>
+                    <p class="mb-0 lesson-subject"></p>
+                </div>
+
+                <div class="col-md-4">
+                    <small class="text-muted">Date</small>
+                    <p class="mb-0 lesson-date"></p>
+                </div>
+
+                <div class="col-md-4">
+                    <small class="text-muted">Time</small>
+                    <p class="mb-0 lesson-time"></p>
+                </div>
+
+                <div class="col-md-4">
+                    <small class="text-muted">Meeting</small>
+                    <div class="lesson-link"></div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    Created: <span class="lesson-created"></span>
+                </small>
+
+                <a class="btn btn-outline-primary btn-sm lesson-detail-link" href="">
+                    View Details
+                </a>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script type="module" src="{% static 'js/lessons/lesson_list.js' %}"></script>
+
+{% endblock %}
