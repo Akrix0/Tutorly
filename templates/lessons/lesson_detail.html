@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Lesson Details
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow border-0">
+
+                <div id="lesson-container" class="card-body p-4" 
+                data-lesson-id="{{ lesson.id }}"
+                data-lesson-title="{{ lesson.title }}"
+                data-lesson-api-url="{% url "lessons:lesson-detail" lesson.id %}"
+                data-account-detail="{% url "accounts:account_detail" slug=user.slug %}">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <div>
+                            <h2 class="mb-1" id="lesson-title">
+                                Lesson
+                            </h2>
+
+                            <small class="text-muted">
+                                Lesson ID:
+                                <span id="lesson-id"></span>
+                            </small>
+                        </div>
+
+                        <span id="lesson-status"
+                                class="badge fs-6 px-3 py-2">
+                        </span>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <h6 class="text-secondary">Tutor</h6>
+                            <p class="fs-5 mb-0" id="lesson-tutor"></p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-secondary">Student</h6>
+                            <p class="fs-5 mb-0" id="lesson-student"></p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-secondary">Subject</h6>
+                            <p class="fs-5 mb-0" id="lesson-subject"></p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-secondary">Date</h6>
+                            <p class="fs-5 mb-0" id="lesson-date"></p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-secondary">Time</h6>
+                            <p class="fs-5 mb-0" id="lesson-time"></p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-secondary">Meeting</h6>
+
+                            <div id="lesson-link"></div>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row text-muted small">
+
+                        <div class="col-md-6">
+                            <strong>Created:</strong>
+                            <span id="lesson-created"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Updated:</strong>
+                            <span id="lesson-updated"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-white border-0">
+
+                    <div class="d-flex justify-content-between">
+
+                        <a href="{% url 'lessons:lesson_list' %}"
+                            class="btn btn-outline-secondary">
+                            ← Back
+                        </a>
+
+                        <div class="d-flex gap-2">
+
+                            <a href="{% url 'lessons:lesson_edit' lesson.id %}"
+                                class="btn btn-outline-warning">
+                                Edit
+                            </a>
+
+                            <button class="btn btn-outline-danger"
+                                    id="delete-btn">
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="{% static 'js/lessons/lesson_detail.js' %}"></script>
+{% endblock %}

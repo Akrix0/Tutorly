@@ -1,7 +1,7 @@
 from django.db import models
 
 from lessons.models import Lesson
-from core import exceptions
+from core.exceptions import reviews
 from core.models import BaseModel, RatingField
 from core.utils import find_average
 
@@ -13,7 +13,7 @@ class Review(BaseModel):
         super().clean()
 
         if self.lesson.status != Lesson.LessonStatus.COMPLETED:
-            raise exceptions.NoCompletedLessonError()
+            raise reviews.NoCompletedLessonError()
 
     @property
     def tutor(self):

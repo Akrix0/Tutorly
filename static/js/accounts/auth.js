@@ -1,3 +1,5 @@
+import { handleErrors } from "../core/utils.js";
+
 //* URLs
 const apiUrl = "/api";
 const homeUrl = "/";
@@ -11,28 +13,6 @@ const loginForm = document.getElementById("login-form");
 const logoutForm = document.getElementById("logout-form");
 
 //* Helpers
-function handleErrors(errors) {
-    console.error(errors);
-
-    let message = "";
-
-    for (const [field, fieldErrors] of Object.entries(errors)) {
-        message += `${field}:\n`;
-
-        if (typeof fieldErrors === "string") {
-            message += `${fieldErrors}\n`;
-        } else {
-            for (const error of fieldErrors) {
-                message += ` • ${error}\n`;
-            }
-        }
-
-        message += "\n";
-    }
-
-    alert(message);
-}
-
 async function postJson(url, data) {
     const response = await fetch(url, {
         method: "POST",

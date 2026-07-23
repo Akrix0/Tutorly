@@ -4,7 +4,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
-from core import exceptions
+from core.exceptions import accounts
 
 User = get_user_model()
 
@@ -19,7 +19,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise exceptions.PasswordMismatchError()
+            raise accounts.PasswordMismatchError()
         return attrs
 
     @transaction.atomic
@@ -40,7 +40,7 @@ class UserLogoutSerializer(serializers.Serializer):
             token = RefreshToken(attrs["refresh"])
             attrs["token"] = token
         except TokenError:
-            raise exceptions.InvalidRefreshTokenError()
+            raise accounts.InvalidRefreshTokenError()
         return attrs
 
 class AccountSerializer(serializers.ModelSerializer):

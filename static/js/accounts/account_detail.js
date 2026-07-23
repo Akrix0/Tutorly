@@ -10,7 +10,6 @@ const firstNameField = document.getElementById("first-name")
 const lastNameField = document.getElementById("last-name")
 
 const accountUrl = accountContainer.dataset.accountUrl;
-const accountEdit = accountContainer.dataset.accountEdit
 
 //* API
 async function getAccountData() {

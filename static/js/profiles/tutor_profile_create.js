@@ -1,3 +1,5 @@
+import { handleErrors } from "../core/utils.js";
+
 //* Elements
 const subjectsContainer = document.querySelector("#subjects-container");
 const availabilitiesContainer = document.querySelector("#availabilities-container");
@@ -70,28 +72,6 @@ function nextStep(step) {
 
 function prevStep(step) {
     showStep(step);
-}
-
-function handleErrors(errors) {
-    console.error(errors);
-
-    let message = "";
-
-    for (const [field, fieldErrors] of Object.entries(errors)) {
-        message += `${field}:\n`;
-
-        if (typeof fieldErrors === "string") {
-            message += `${fieldErrors}\n`;
-        } else {
-            for (const error of fieldErrors) {
-                message += ` • ${error}\n`;
-            }
-        }
-
-        message += "\n";
-    }
-
-    alert(message);
 }
 
 //* API
