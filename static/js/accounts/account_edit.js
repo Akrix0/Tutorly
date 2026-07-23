@@ -1,5 +1,6 @@
 //* Imports
 import {apiFetch} from "../api.js"
+import { handleErrors } from "../core/utils.js";
 
 //* Elements
 const accountEditForm = document.getElementById("account-edit-form");
@@ -119,7 +120,7 @@ async function handleAccountEdit(event) {
 
         window.location.href = accountDetail;
     } catch (error) {
-        console.error(error);
+        handleErrors(errors)
     }
 }
 
@@ -133,7 +134,7 @@ async function init() {
 
         renderAccount(account);
     } catch (error) {
-        console.error(error);
+        handleErrors(errors)
     }
 }
 

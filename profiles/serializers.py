@@ -3,7 +3,8 @@ from django.db import transaction
 from rest_framework import serializers
 
 from .models import TutorSubject, Availability, TutorCard
-from core import exceptions, utils
+from core import utils
+from core.exceptions import profiles
 
 class TutorSubjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,10 +42,10 @@ class TutorProfileCreateSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         age = utils.get_age(attrs["birth_date"])
         if attrs["experience_years"] >= age - 12:
-            raise exceptions.InvalidDataError("experience_years")
+            raise profiles.InvalidDataError("experience_years")
 
         if age <= 14:
-            raise exceptions.TooYoungError()
+            raise profiles.TooYoungError()
 
         availabilities = attrs["availabilities"]
         for i in range(len(availabilities)):
@@ -53,11 +54,11 @@ class TutorProfileCreateSerializer(serializers.ModelSerializer):
                 second = availabilities[j]
                 if first["weekday"] == second["weekday"]:
                     if utils.check_overlap(first["start_time"], first["end_time"], second["start_time"], second["end_time"]):
-                        raise exceptions.TimeIntervalsOverlapError()
+                        raise profiles.TimeIntervalsOverlapError()
 
         for availability in availabilities:
             if availability["start_time"] >= availability["end_time"]:
-                raise exceptions.InvalidTimeRangeError()
+                raise profiles.InvalidTimeRangeError()
 
         subjects = attrs["subjects"]
         for i in range(len(subjects)):
@@ -65,7 +66,7 @@ class TutorProfileCreateSerializer(serializers.ModelSerializer):
             for j in range(i + 1, len(subjects)):
                 second = subjects[j]
                 if first["subject"] == second["subject"]:
-                    raise exceptions.DuplicateSubjectsError()
+                    raise profiles.DuplicateSubjectsError()
 
         return attrs
 

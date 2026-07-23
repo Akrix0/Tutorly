@@ -46,8 +46,8 @@ class LessonAdmin(admin.ModelAdmin):
         "student",
         "subject",
         "subject__subject",
-        "subject__tutor",
-        "subject__tutor__account",
+        "subject__tutor_card",
+        "subject__tutor_card__account",
     )
 
     fieldsets = (

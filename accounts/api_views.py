@@ -54,7 +54,6 @@ class Account(APIView):
 
     def get(self, request, slug):
         account = get_object_or_404(User, slug=slug)
-        self.check_object_permissions(request, account)
         serializer = serializers.AccountSerializer(account)
 
         return Response(serializer.data, status=status.HTTP_200_OK)

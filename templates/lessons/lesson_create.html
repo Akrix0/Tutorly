@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Create Lesson
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lessons/styles.css' %}">
+{% endblock extra_css %}
+
+
+{% block content %}
+
+<h1>Create Lesson</h1>
+
+<form id="lesson-form"
+data-student-id="{{ student.id }}"
+data-lesson-create-api-url="{% url "lessons:lesson-list" %}">
+    <div>
+        <label for="student">Student</label><br>
+            <input
+                type="text"
+                id="student"
+                name="student"
+                value="{{ student.username }}"
+                required
+                readonly
+            >
+    </div>
+
+    <br>
+
+    <div>
+        <label>Subject</label><br>
+        <select id="subject" name="subject" required >
+            {% for subj in subject %}
+                <option value="{{ subj.id }}">{{ subj.subject_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="date">Date</label><br>
+        <input
+            type="date"
+            id="date"
+            name="date"
+            required
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="start-time">Start time</label><br>
+        <input
+            type="time"
+            id="start-time"
+            name="start-time"
+            required
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="end-time">End time</label><br>
+        <input
+            type="time"
+            id="end-time"
+            name="end-time"
+            required
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label for="lesson-link">Lesson link</label><br>
+        <input
+            type="url"
+            id="lesson-link"
+            name="lesson-link"
+            required
+        >
+    </div>
+
+    <br>
+
+    <button type="submit" id="create-lesson-btn">
+        Create Lesson
+    </button>
+</form>
+{% load static %}
+<script type="module" src="{% static 'js/lessons/lesson_create.js' %}"></script>
+
+{% endblock content %}

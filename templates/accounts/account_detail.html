@@ -14,7 +14,7 @@
 
 <div class="profile-page" 
         id="account-profile" 
-        data-account-url = "{% url "accounts:account_api" slug=user.slug %}">
+        data-account-url = "{% url "accounts:account_api" slug=account.slug %}">
 
     <section class="profile-header">
 
@@ -37,11 +37,20 @@
     <section class="profile-card">
         <div class="d-flex justify-content-between">
             <h2>Profile Information</h2>
+
+            {% if account == user %}
+                <a class="btn btn-warning" 
+                    href="{% url "accounts:account_edit" slug=user.slug %}"
+                    role="button">Edit Profile
+                </a>
+            {% endif %}
             
-            <a class="btn btn-warning" 
-                href="{% url "accounts:account_edit" slug=user.slug %}"
-                role="button">Edit Profile
-            </a>
+            {% if account_is_student and user_is_tutor  %}
+                <a class="btn btn-success" 
+                    href="{% url "lessons:lesson_create" slug=account.slug %}"
+                    role="button">Create Lesson
+                </a>
+            {% endif %}
         </div>
 
         <div class="profile-field">
@@ -59,12 +68,20 @@
             <span class="value" id="last-name"></span>
         </div>
 
-    </section>
+        <div class="profile-field">
+            {% if account_is_tutor %}
+                <a class="btn btn-success" 
+                    href="{% url "profiles:tutor_profile_detail" account.tutor_card.id %}"
+                    role="button">Tutor Profile
+                </a>
+            {% endif %}
+        </div>
 
-    <div id="errors" class="errors"></div>
+
+    </section>
 
 </div>
 
-<script type="module" src="{% static 'js/accounts/account_detail.js' %}"></script>
+<script src="{% static 'js/accounts/account_detail.js' %}"></script>
 
 {% endblock %}

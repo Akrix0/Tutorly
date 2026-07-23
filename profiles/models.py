@@ -4,8 +4,9 @@ from django.core.validators import MinValueValidator
 from django_countries.fields import CountryField
 
 from accounts.models import Account
-from core import exceptions, utils
+from core import utils
 from core.models import BaseModel, Currency
+from core.exceptions import profiles
 
 class TutorCard(BaseModel):
     account = models.OneToOneField(
@@ -26,13 +27,13 @@ class TutorCard(BaseModel):
         super().clean()
 
         if self.account.role != Account.UserRole.TUTOR:
-            raise exceptions.TutorRoleError()
+            raise profiles.TutorRoleError()
         
         if self.experience_years >= self.age - 12:
-            raise exceptions.InvalidDataError("experience_years")
+            raise profiles.InvalidDataError("experience_years")
         
         if  self.age <= 14:
-            raise exceptions.TooYoungError()
+            raise profiles.TooYoungError()
 
     def __str__(self):
         return f"TutorCard for {self.account.username} ({self.country.name})"
@@ -100,7 +101,7 @@ class Availability(BaseModel):
         super().clean()
 
         if self.start_time >= self.end_time:
-            raise exceptions.InvalidTimeRangeError()
+            raise profiles.InvalidTimeRangeError()
 
     def __str__(self):
         return f"{self.get_weekday_display()} {self.start_time} - {self.end_time} for {self.tutor_card.account.username}"
@@ -127,6 +128,10 @@ class TutorSubject(BaseModel):
 
     def __str__(self):
         return f"{self.subject.get_name_display()} for {self.tutor_card.account.username} at ${self.price_per_hour}/hour"
+
+    @property
+    def subject_name(self):
+        return self.subject.get_name_display()
 
     class Meta:
         constraints = [

@@ -5,7 +5,7 @@ from datetime import datetime
 from decimal import Decimal
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from . import exceptions
+from .exceptions import profiles
 
 def custom_slugify(value):
     slug = slugify(value)
@@ -17,7 +17,7 @@ def get_total_price(price, start_time, end_time):
 
     duration = Decimal((end_dt - start_dt).total_seconds()) / Decimal(3600)
     if duration <= 0:
-        raise exceptions.InvalidTimeRangeError()
+        raise profiles.InvalidTimeRangeError()
     return round(price * duration, 2)
 
 def find_average(*args):
@@ -37,7 +37,7 @@ def get_tokens_for_user(user):
 def get_age(birth_date):
     today = timezone.now().date()
     if birth_date >= today:
-        raise exceptions.InvalidDataError("birth_date")
+        raise profiles.InvalidDataError("birth_date")
     age = today.year - birth_date.year
     if today.month < birth_date.month or (today.month == birth_date.month and today.day < birth_date.day):
         age -= 1
