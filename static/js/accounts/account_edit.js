@@ -1,5 +1,3 @@
-//* Imports
-import {apiFetch} from "../api.js"
 import { handleErrors } from "../core/utils.js";
 
 //* Elements
@@ -34,7 +32,7 @@ async function getAccountData() {
     const token = localStorage.getItem("access");
     if (!token) return null;
 
-    const response = await apiFetch(accountUrl, {
+    const response = await fetch(accountUrl, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -53,7 +51,7 @@ async function editAccount(formData) {
     const token = localStorage.getItem("access");
     if (!token) return null;
 
-    const response = await apiFetch(accountUrl, {
+    const response = await fetch(accountUrl, {
         method: "PATCH",
         headers: {
             Authorization: `Bearer ${token}`,
